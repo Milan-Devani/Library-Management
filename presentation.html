@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System — Presentation Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #0f172a;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* Presentation Canvas (16:9 Aspect Ratio) */
+    .deck-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 24px;
+      position: relative;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1260px;
+      aspect-ratio: 16 / 9;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      padding: 36px 48px;
+      position: relative;
+      flex-direction: column;
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.985); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Top Category Banner */
+    .slide-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #2563eb;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    /* Title Styling */
+    .slide-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 6px;
+      letter-spacing: -0.4px;
+    }
+
+    .slide-divider {
+      width: 50px;
+      height: 3.5px;
+      background: #2563eb;
+      border-radius: 2px;
+      margin-bottom: 18px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 0;
+    }
+
+    .slide-footer {
+      font-size: 10.5px;
+      color: #94a3b8;
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 10px;
+      margin-top: 12px;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .card.blue-card {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+    }
+
+    .card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .card p {
+      font-size: 11.5px;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    /* Screenshot Layout */
+    .screenshot-layout {
+      display: flex;
+      gap: 20px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .screenshot-frame {
+      flex: 1.5;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      height: auto;
+      flex: 1;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .screenshot-caption {
+      padding: 6px 12px;
+      font-size: 10px;
+      color: #64748b;
+      background: #f8fafc;
+      border-top: 1px solid #f1f5f9;
+      text-align: center;
+      font-style: italic;
+    }
+
+    .screenshot-sidebar {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Bottom Control Bar */
+    .controls {
+      height: 52px;
+      background: #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      color: #e2e8f0;
+      font-size: 13px;
+      border-top: 1px solid #334155;
+    }
+
+    .btn {
+      background: #334155;
+      color: #ffffff;
+      border: none;
+      padding: 7px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #2563eb;
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .code-box {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0f172a;
+      color: #38bdf8;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide active" id="slide-1">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+        <span class="slide-category">COLLEGE FULL-STACK PROJECT PRESENTATION</span>
+        <h1 style="font-size: 36px; font-weight: 800; color: #1e3a8a; margin: 8px 0; line-height: 1.1;">
+          Library Management System
+        </h1>
+        <p style="font-size: 15px; color: #475569; margin-bottom: 20px;">
+          A Web Platform for Automated Book Cataloging, Circulation & Fine Settlement
+        </p>
+
+        <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 12px 18px; border-radius: 8px; margin-bottom: 24px;">
+          <strong style="color: #2563eb; font-size: 12.5px;">Architecture:</strong>
+          <span style="font-size: 12.5px; color: #1e40af; margin-left: 8px;">
+            React.js (Vite) &bull; Redux Toolkit &bull; Tailwind CSS &bull; Native PHP REST API &bull; MySQL (PDO)
+          </span>
+        </div>
+
+        <div class="grid-2" style="font-size: 11.5px; color: #334155; line-height: 1.7;">
+          <div>
+            <strong>Department:</strong> Computer Science & Engineering<br>
+            <strong>Project Mode:</strong> Final Year Project / Technical Viva
+          </div>
+          <div>
+            <strong>Features:</strong> ACID Transactions, Bcrypt Security, Zero Page-Reload<br>
+            <strong>Default Login:</strong> admin@library.com / admin123
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System — Full-Stack Academic Project</span>
+        <span>Slide 1 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Problem Statement -->
+    <div class="slide" id="slide-2">
+      <span class="slide-category">BACKGROUND</span>
+      <h2 class="slide-title">Problem Statement & Motivation</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left: 4px solid #dc2626;">
+            <h4>Manual Paper Registers</h4>
+            <p>Physical paper logs suffer from misplaced records, torn pages, handwriting ambiguity, and lack of searchability.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #d97706;">
+            <h4>Stock Inaccuracy</h4>
+            <p>Difficulty in maintaining real-time physical inventory counts versus books currently issued to students.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #dc2626;">
+            <h4>Manual Fine Calculation</h4>
+            <p>Librarians waste time manually counting overdue days and computing penalty fees, leading to errors and audit disputes.</p>
+          </div>
+          <div class="card" style="border-left: 4px solid #2563eb;">
+            <h4>Zero Student Self-Visibility</h4>
+            <p>Borrowers have no immediate way to view active loans, impending due dates, or check catalog book availability.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 2 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Objectives -->
+    <div class="slide" id="slide-3">
+      <span class="slide-category">GOALS</span>
+      <h2 class="slide-title">Project Objectives & Expected Outcomes</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body" style="gap: 10px;">
+        <div class="card blue-card" style="display:flex; align-items:center; gap:16px; padding: 12px 18px;">
+          <span style="font-size:18px; font-weight:800; color:#2563eb;">01</span>
+          <div>
+            <h4 style="margin:0; font-size:13.5px;">Automated Catalog Management</h4>
+            <p style="margin:0; font-size:11px;">Centralize books, authors, and classification categories with strict ISBN uniqueness.</p>
+          </div>
+        </div>
+        <div class="card blue-card" style="display:flex; align-items:center; gap:16px; padding: 12px 18px;">
+          <span style="font-size:18px; font-weight:800; color:#2563eb;">02</span>
+          <div>
+            <h4 style="margin:0; font-size:13.5px;">Real-Time Inventory Synchronization</h4>
+            <p style="margin:0; font-size:11px;">Dynamically decrement available copies on issue and restore physical counts upon return.</p>
+          </div>
+        </div>
+        <div class="card blue-card" style="display:flex; align-items:center; gap:16px; padding: 12px 18px;">
+          <span style="font-size:18px; font-weight:800; color:#2563eb;">03</span>
+          <div>
+            <h4 style="margin:0; font-size:13.5px;">ACID Transactional Guarantees</h4>
+            <p style="margin:0; font-size:11px;">Ensure absolute database consistency using atomic MySQL transactions during circulation.</p>
+          </div>
+        </div>
+        <div class="card blue-card" style="display:flex; align-items:center; gap:16px; padding: 12px 18px;">
+          <span style="font-size:18px; font-weight:800; color:#2563eb;">04</span>
+          <div>
+            <h4 style="margin:0; font-size:13.5px;">Automated Overdue Penalty Engine</h4>
+            <p style="margin:0; font-size:11px;">Calculate late fees automatically at ₹5.00/day on the server and manage cash collection logs.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 3 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Tech Stack -->
+    <div class="slide" id="slide-4">
+      <span class="slide-category">TECHNOLOGY</span>
+      <h2 class="slide-title">Technology Stack Breakdown</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="badge badge-blue">Frontend SPA</span>
+            <h4 style="margin-top:6px;">React 18 &bull; Vite 5</h4>
+            <p>&bull; Redux Toolkit state slices<br>&bull; Tailwind CSS v3 styling<br>&bull; Axios with Bearer Interceptor<br>&bull; React Hot Toast alerts</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-blue">Backend Engine</span>
+            <h4 style="margin-top:6px;">Native PHP 8.2 API</h4>
+            <p>&bull; Pure REST architecture<br>&bull; PDO prepared statements<br>&bull; Bearer token middleware<br>&bull; Bcrypt password encryption</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-green">Persistence</span>
+            <h4 style="margin-top:6px;">MySQL / MariaDB</h4>
+            <p>&bull; InnoDB ACID Transactions<br>&bull; Foreign key integrity guards<br>&bull; Auto port fallback (3306/3307)<br>&bull; Pre-seeded realistic demo data</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 4 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Architecture -->
+    <div class="slide" id="slide-5">
+      <span class="slide-category">SYSTEM DESIGN</span>
+      <h2 class="slide-title">3-Tier System Architecture</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body" style="gap:12px;">
+        <div class="card" style="border-left: 4px solid #2563eb;">
+          <h4 style="color:#2563eb;">Tier 1: Client Presentation Layer (React 18 + Vite)</h4>
+          <p>Runs directly inside the browser. Manages client-side protected routing, Redux Toolkit slices, reusable UI components, and input validation.</p>
+        </div>
+        <div class="card" style="border-left: 4px solid #1e3a8a;">
+          <h4 style="color:#1e3a8a;">Tier 2: Business Logic & REST Gateway (Pure PHP 8.2)</h4>
+          <p>API gateway inspects incoming requests, verifies Bearer tokens, executes circulation domain logic, and enforces institutional borrowing limits.</p>
+        </div>
+        <div class="card" style="border-left: 4px solid #059669;">
+          <h4 style="color:#059669;">Tier 3: Relational Database Layer (MySQL / MariaDB)</h4>
+          <p>Guarantees ACID transactions, pessimistic row-level locking (SELECT ... FOR UPDATE), foreign key constraints, and port auto-fallback.</p>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 5 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: UI Screenshot 1 (Dashboard) -->
+    <div class="slide" id="slide-6">
+      <span class="slide-category">SYSTEM INTERFACE DEMONSTRATION</span>
+      <h2 class="slide-title">Live Analytics Dashboard</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="screenshot-layout">
+          <div class="screenshot-frame">
+            <img src="screenshots/02_dashboard.png" alt="Dashboard Screenshot">
+            <div class="screenshot-caption">Figure 1: Real-time Admin Dashboard displaying 8 KPI counters, popular titles, and overdue alerts.</div>
+          </div>
+          <div class="screenshot-sidebar">
+            <span class="badge badge-blue">REAL-TIME ANALYTICS</span>
+            <h4>Live Dashboard Metrics</h4>
+            <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+              <p><strong>✓ 8 KPI Counter Cards:</strong> Instant metrics for Total Books, Total Inventory, Active Issues, and Overdue Returns.</p>
+              <p style="margin-top:6px;"><strong>✓ Live Activity Feed:</strong> Real-time audit log of borrow transactions with student roll numbers.</p>
+              <p style="margin-top:6px;"><strong>✓ Overdue Alert Box:</strong> Highlights overdue books requiring late-fee settlement.</p>
+              <p style="margin-top:6px;"><strong>✓ Zero Reload:</strong> Synchronized instantaneously via Redux Toolkit slices.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 6 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: UI Screenshot 2 (Books Catalog) -->
+    <div class="slide" id="slide-7">
+      <span class="slide-category">SYSTEM INTERFACE DEMONSTRATION</span>
+      <h2 class="slide-title">Book Catalog & Real-Time Stock</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="screenshot-layout">
+          <div class="screenshot-frame">
+            <img src="screenshots/03_books.png" alt="Books Catalog Screenshot">
+            <div class="screenshot-caption">Figure 2: Complete book catalog with multi-column filtering, available stock counts, and CRUD action triggers.</div>
+          </div>
+          <div class="screenshot-sidebar">
+            <span class="badge badge-green">INVENTORY CONTROL</span>
+            <h4>Catalog Features</h4>
+            <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+              <p><strong>✓ Instant Multi-Search:</strong> Filter books by Title, Author, Category, or unique 13-digit ISBN code.</p>
+              <p style="margin-top:6px;"><strong>✓ Dynamic Stock Ratio:</strong> Displays Available vs Total copies to prevent over-loaning.</p>
+              <p style="margin-top:6px;"><strong>✓ Shelf Rack Locators:</strong> Shows physical library aisle and rack location tags.</p>
+              <p style="margin-top:6px;"><strong>✓ Protected CRUD:</strong> Edit, view modal, and foreign-key protected delete operations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 7 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: UI Screenshot 3 (Circulation / Issues) -->
+    <div class="slide" id="slide-8">
+      <span class="slide-category">SYSTEM INTERFACE DEMONSTRATION</span>
+      <h2 class="slide-title">Circulation & Issue Ledger</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="screenshot-layout">
+          <div class="screenshot-frame">
+            <img src="screenshots/04_issues.png" alt="Circulation Issues Screenshot">
+            <div class="screenshot-caption">Figure 3: Active book loan circulation ledger showing issue dates, return due dates, and return action buttons.</div>
+          </div>
+          <div class="screenshot-sidebar">
+            <span class="badge badge-blue">ACID CIRCULATION</span>
+            <h4>Circulation Guardrails</h4>
+            <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+              <p><strong>✓ Student Quota Enforcement:</strong> Verifies maximum book loan allowance (max 3 books per student).</p>
+              <p style="margin-top:6px;"><strong>✓ Duplicate Prevention:</strong> Prevents a student from taking duplicate copies of the same book.</p>
+              <p style="margin-top:6px;"><strong>✓ 1-Click Return Trigger:</strong> Seamless return flow with automatic overdue fee calculation.</p>
+              <p style="margin-top:6px;"><strong>✓ Color Badges:</strong> Clear indicators for "Issued", "Returned", and "Overdue".</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 8 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: UI Screenshot 4 (Fines Ledger) -->
+    <div class="slide" id="slide-9">
+      <span class="slide-category">SYSTEM INTERFACE DEMONSTRATION</span>
+      <h2 class="slide-title">Overdue Fine Settlement Ledger</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="screenshot-layout">
+          <div class="screenshot-frame">
+            <img src="screenshots/05_fines.png" alt="Fines Ledger Screenshot">
+            <div class="screenshot-caption">Figure 4: Financial ledger showing calculated late fees, payment statuses, and counter payment recording.</div>
+          </div>
+          <div class="screenshot-sidebar">
+            <span class="badge badge-amber">FINANCIAL AUDIT</span>
+            <h4>Fine Engine Highlights</h4>
+            <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+              <p><strong>✓ Automatic Math:</strong> Calculated at ₹5.00/day for each day exceeding the designated due date.</p>
+              <p style="margin-top:6px;"><strong>✓ Payment Statuses:</strong> Real-time auditing for "Unpaid" and "Paid" fines with timestamps.</p>
+              <p style="margin-top:6px;"><strong>✓ Cash Settlement:</strong> 1-click payment recording when students pay cash at the desk.</p>
+              <p style="margin-top:6px;"><strong>✓ Complete Traceability:</strong> Linked directly to student roll number and book ISBN.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 9 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: UI Screenshot 5 (Members Directory) -->
+    <div class="slide" id="slide-10">
+      <span class="slide-category">SYSTEM INTERFACE DEMONSTRATION</span>
+      <h2 class="slide-title">Student & Member Directory</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="screenshot-layout">
+          <div class="screenshot-frame">
+            <img src="screenshots/06_members.png" alt="Members Directory Screenshot">
+            <div class="screenshot-caption">Figure 5: Student and faculty registry tracking academic departments, contact info, and active loan allowances.</div>
+          </div>
+          <div class="screenshot-sidebar">
+            <span class="badge badge-blue">MEMBER REGISTRY</span>
+            <h4>Directory Capabilities</h4>
+            <div style="font-size:11.5px; color:#475569; line-height:1.6;">
+              <p><strong>✓ Academic Details:</strong> Captures Student Name, Roll Number, Branch (CSE, IT, ECE), and Semester.</p>
+              <p style="margin-top:6px;"><strong>✓ Contact Data:</strong> Verified phone numbers and emails for overdue reminders.</p>
+              <p style="margin-top:6px;"><strong>✓ Member Status Guards:</strong> Suspended students cannot borrow any books.</p>
+              <p style="margin-top:6px;"><strong>✓ Borrow Capacity:</strong> Live indicator of current active books borrowed.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 10 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: Modules -->
+    <div class="slide" id="slide-11">
+      <span class="slide-category">FUNCTIONAL MODULES</span>
+      <h2 class="slide-title">Core System Modules Summary</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-3" style="gap:12px;">
+          <div class="card">
+            <h4>1. Authentication</h4>
+            <p>Bcrypt login & register, token session storage, protected route wrappers.</p>
+          </div>
+          <div class="card">
+            <h4>2. Live Dashboard</h4>
+            <p>8 real-time KPI stat cards, recent issues, and overdue book alerts.</p>
+          </div>
+          <div class="card">
+            <h4>3. Books Catalog</h4>
+            <p>Complete CRUD, ISBN uniqueness, publisher, rack location, and copy counts.</p>
+          </div>
+          <div class="card">
+            <h4>4. Student Directory</h4>
+            <p>Student registration with branch, course, academic year, and active borrow counts.</p>
+          </div>
+          <div class="card">
+            <h4>5. Issue Circulation</h4>
+            <p>Zero copy protection, active student check, duplicate loan prevention.</p>
+          </div>
+          <div class="card">
+            <h4>6. Returns & Fines</h4>
+            <p>Automatic overdue math at ₹5.00/day, copy restoration, and payment ledger.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 11 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: Redux Mechanism -->
+    <div class="slide" id="slide-12">
+      <span class="slide-category">STATE SYNCHRONIZATION</span>
+      <h2 class="slide-title">Working Mechanism: Redux Toolkit & REST API</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <span class="badge badge-blue">Step 1 & 2</span>
+            <h4 style="margin-top:6px;">User Trigger & Thunk</h4>
+            <p>User clicks "Issue Book". React dispatches <code>createAsyncThunk(createIssue)</code> with form payload.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-blue">Step 3 & 4</span>
+            <h4 style="margin-top:6px;">Axios & PHP Gateway</h4>
+            <p>Axios interceptor attaches Bearer token. PHP middleware verifies token and launches transaction controller.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-green">Step 5 & 6</span>
+            <h4 style="margin-top:6px;">Commit & Zero-Reload</h4>
+            <p>MySQL executes commit. Redux extraReducers update state locally, refreshing UI with zero page reload.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 12 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 13: Database Relational Integrity -->
+    <div class="slide" id="slide-13">
+      <span class="slide-category">DATA INTEGRITY</span>
+      <h2 class="slide-title">Database Design & Relational Constraints</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body" style="gap:10px;">
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px;">
+          <div>
+            <code style="font-weight:700; color:#2563eb;">books (author_id, category_id)</code>
+            <p style="margin:2px 0 0; font-size:11px;">Foreign Keys &rarr; authors.id, categories.id (ON DELETE RESTRICT)</p>
+          </div>
+          <span class="badge badge-blue">Prevents Orphan Records</span>
+        </div>
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px;">
+          <div>
+            <code style="font-weight:700; color:#2563eb;">issues (book_id, member_id)</code>
+            <p style="margin:2px 0 0; font-size:11px;">Foreign Keys &rarr; books.id, members.id (ON DELETE RESTRICT)</p>
+          </div>
+          <span class="badge badge-green">Protected Loan History</span>
+        </div>
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center; padding:12px 18px;">
+          <div>
+            <code style="font-weight:700; color:#2563eb;">fines (issue_id)</code>
+            <p style="margin:2px 0 0; font-size:11px;">Foreign Key &rarr; issues.id (ON DELETE RESTRICT)</p>
+          </div>
+          <span class="badge badge-amber">Financial Audit Trail</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 13 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 14: ACID Transactions -->
+    <div class="slide" id="slide-14">
+      <span class="slide-category">CONCURRENCY & SAFETY</span>
+      <h2 class="slide-title">ACID Transactions: Issue vs. Return</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-top: 3px solid #2563eb;">
+            <h4 style="color:#2563eb;">Issue Transaction Flow</h4>
+            <div class="code-box" style="margin-top:6px; font-size:10.5px;">
+              BEGIN TRANSACTION;<br>
+              1. Lock member & verify status == 'active'<br>
+              2. Check student active loans &lt; 3<br>
+              3. Check no duplicate active loan<br>
+              4. Lock book row & check available &gt; 0<br>
+              5. INSERT INTO issues (...)<br>
+              6. UPDATE books SET available = available - 1<br>
+              COMMIT;
+            </div>
+          </div>
+          <div class="card" style="border-top: 3px solid #059669;">
+            <h4 style="color:#059669;">Return Transaction Flow</h4>
+            <div class="code-box" style="margin-top:6px; font-size:10.5px;">
+              BEGIN TRANSACTION;<br>
+              1. Lock issue & verify status == 'issued'<br>
+              2. Calculate overdue days = max(0, Return - Due)<br>
+              3. Calculate fine = overdue_days * fine_rate<br>
+              4. UPDATE issues SET status = 'returned'<br>
+              5. UPDATE books SET available = available + 1<br>
+              6. If fine &gt; 0: INSERT INTO fines (...)<br>
+              COMMIT;
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 14 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 15: Fine Calculation -->
+    <div class="slide" id="slide-15">
+      <span class="slide-category">BUSINESS RULES</span>
+      <h2 class="slide-title">Automated Fine Calculation Engine</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="card blue-card" style="margin-bottom:14px; text-align:center; padding:14px;">
+          <h4 style="color:#1e3a8a; font-size:15px; margin-bottom:4px;">Server-Enforced Fine Formula</h4>
+          <code style="font-size:14px; font-weight:700; color:#2563eb;">
+            Overdue Days = MAX( 0, Return Date − Due Date )<br>
+            Fine Amount = Overdue Days &times; ₹5.00 / day
+          </code>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <h4>Live UI Preview</h4>
+            <p>Librarian sees calculated estimate instantly upon selecting return date in modal.</p>
+          </div>
+          <div class="card">
+            <h4>Server Enforcement</h4>
+            <p>PHP backend recalculates on the server to prevent client-side date manipulation.</p>
+          </div>
+          <div class="card">
+            <h4>Settlement Ledger</h4>
+            <p>Fines start as "Unpaid" and transition to "Paid" upon counter cash collection.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 15 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 16: Security -->
+    <div class="slide" id="slide-16">
+      <span class="slide-category">SECURITY PROTOCOLS</span>
+      <h2 class="slide-title">Security & Protection Implementations</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <span class="badge badge-green">Cryptographic Hashing</span>
+            <h4 style="margin-top:6px;">Bcrypt Password Security</h4>
+            <p>Passwords hashed with native <code>password_hash($pass, PASSWORD_BCRYPT)</code>. Never stored in plain text.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-green">Database Protection</span>
+            <h4 style="margin-top:6px;">PDO Prepared Statements</h4>
+            <p>100% parameter-bound SQL queries (<code>:id, :isbn</code>) neutralizing SQL injection vulnerabilities.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-blue">Authentication</span>
+            <h4 style="margin-top:6px;">Bearer Token Protocol</h4>
+            <p>Stateless 64-character tokens stored in <code>user_tokens</code> table with automated expiration validation.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-blue">Input Sanitization</span>
+            <h4 style="margin-top:6px;">XSS & CORS Defense</h4>
+            <p>HTML entity escaping and centralized CORS headers in response gateway guarding against injection.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 16 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 17: Challenges -->
+    <div class="slide" id="slide-17">
+      <span class="slide-category">DEVELOPMENT JOURNEY</span>
+      <h2 class="slide-title">Engineering Challenges Faced</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <span class="badge badge-amber">Challenge 1</span>
+            <h4 style="margin-top:6px;">Dual Port Conflicts (3306 vs 3307)</h4>
+            <p>Developer computers often run both MySQL 8 and XAMPP MariaDB, causing connection refused errors.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-amber">Challenge 2</span>
+            <h4 style="margin-top:6px;">Concurrency & Stock Overselling</h4>
+            <p>Risk of two librarians issuing the last copy at the same second causing negative inventory counts.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-amber">Challenge 3</span>
+            <h4 style="margin-top:6px;">Zero Page-Reload Synchronization</h4>
+            <p>Keeping counts, badges, and tables in sync without forcing disruptive browser reloads.</p>
+          </div>
+          <div class="card">
+            <span class="badge badge-amber">Challenge 4</span>
+            <h4 style="margin-top:6px;">Responsive Table Layouts</h4>
+            <p>Large data tables (ISBN, Title, Student, Status) overflowing small mobile viewports.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 17 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 18: Solutions -->
+    <div class="slide" id="slide-18">
+      <span class="slide-category">TECHNICAL INNOVATION</span>
+      <h2 class="slide-title">Technical Solutions Implemented</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card" style="border-left:4px solid #2563eb;">
+            <h4 style="color:#2563eb;">PDO Port Auto-Fallback Connector</h4>
+            <p>Smart database singleton automatically tests port 3306 and seamlessly switches to 3307 if refused, guaranteeing zero setup configuration hassle.</p>
+          </div>
+          <div class="card" style="border-left:4px solid #059669;">
+            <h4 style="color:#059669;">Pessimistic Row Locking</h4>
+            <p>Implemented <code>SELECT ... FOR UPDATE</code> within atomic MySQL transactions, locking stock rows during loans to prevent overselling.</p>
+          </div>
+          <div class="card" style="border-left:4px solid #2563eb;">
+            <h4 style="color:#2563eb;">Redux AsyncThunk Architecture</h4>
+            <p>7 domain slices with <code>extraReducers</code> handling pending, fulfilled, and rejected promise lifecycles with optimistic state mutation.</p>
+          </div>
+          <div class="card" style="border-left:4px solid #059669;">
+            <h4 style="color:#059669;">Responsive Card & Table Layouts</h4>
+            <p>Mobile-first Tailwind grid layouts with horizontal overflow wrappers and collapsible navigation for all screen sizes.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 18 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 19: Future Scope -->
+    <div class="slide" id="slide-19">
+      <span class="slide-category">ROADMAP</span>
+      <h2 class="slide-title">Future Scope & Enhancements</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <h4>📷 Barcode & QR Scanner</h4>
+            <p>Webcam integration for instant ISBN and student card barcode scanning.</p>
+          </div>
+          <div class="card">
+            <h4>📱 Student Portal</h4>
+            <p>Dedicated self-service mobile app to check active loans and reserve books online.</p>
+          </div>
+          <div class="card">
+            <h4>🔔 Automated SMS & Email</h4>
+            <p>Scheduled reminders sent 2 days prior to loan expiration to minimize late fees.</p>
+          </div>
+          <div class="card">
+            <h4>💳 Online Fine Payments</h4>
+            <p>Razorpay / UPI digital payments for instant cashless fine settlement.</p>
+          </div>
+          <div class="card">
+            <h4>📡 RFID Security Gate</h4>
+            <p>Automated entrance sensor to prevent unissued books from leaving the library.</p>
+          </div>
+          <div class="card">
+            <h4>📊 AI Recommendations</h4>
+            <p>Personalized reading suggestions based on department and borrowing history.</p>
+          </div>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 19 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 20: Summary -->
+    <div class="slide" id="slide-20">
+      <span class="slide-category">EVALUATION</span>
+      <h2 class="slide-title">Conclusion & Key Achievements</h2>
+      <div class="slide-divider"></div>
+      <div class="slide-body" style="gap:10px;">
+        <div class="card" style="display:flex; align-items:center; gap:14px; padding:12px 18px;">
+          <span style="color:#059669; font-weight:800; font-size:16px;">✓</span>
+          <span style="font-size:12.5px; color:#1e293b;">Engineered an enterprise-grade full-stack Library Management System ready for college deployment.</span>
+        </div>
+        <div class="card" style="display:flex; align-items:center; gap:14px; padding:12px 18px;">
+          <span style="color:#059669; font-weight:800; font-size:16px;">✓</span>
+          <span style="font-size:12.5px; color:#1e293b;">Zero stock discrepancy achieved via atomic MySQL transactions during circulation loans.</span>
+        </div>
+        <div class="card" style="display:flex; align-items:center; gap:14px; padding:12px 18px;">
+          <span style="color:#059669; font-weight:800; font-size:16px;">✓</span>
+          <span style="font-size:12.5px; color:#1e293b;">Complete Redux Toolkit global state architecture delivering an instantaneous zero-reload SPA experience.</span>
+        </div>
+        <div class="card" style="display:flex; align-items:center; gap:14px; padding:12px 18px;">
+          <span style="color:#059669; font-weight:800; font-size:16px;">✓</span>
+          <span style="font-size:12.5px; color:#1e293b;">Enforced security standards: Bcrypt hashing, 64-char Bearer tokens, and prepared PDO SQL queries.</span>
+        </div>
+        <div class="card" style="display:flex; align-items:center; gap:14px; padding:12px 18px;">
+          <span style="color:#059669; font-weight:800; font-size:16px;">✓</span>
+          <span style="font-size:12.5px; color:#1e293b;">Pre-seeded rich academic dataset: 21 textbooks, 10 authors, 8 categories, and 10 students.</span>
+        </div>
+      </div>
+      <div class="slide-footer">
+        <span>Library Management System</span>
+        <span>Slide 20 / 21</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 21: Q&A -->
+    <div class="slide" id="slide-21" style="background:#1e3a8a; color:#ffffff; justify-content:center; text-align:center;">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+        <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 12px; color: #ffffff;">Thank You!</h1>
+        <p style="font-size: 17px; color: #93c5fd; margin-bottom: 24px;">Library Management System — Full-Stack College Project</p>
+        <div style="width: 80px; height: 4px; background: #60a5fa; border-radius: 2px; margin-bottom: 24px;"></div>
+        <p style="font-size: 15px; color: #e2e8f0;">Demonstration & Questions Welcome</p>
+        <p style="font-size: 12px; color: #93c5fd; margin-top: 16px; font-family: 'JetBrains Mono', monospace;">
+          Live Demo URL: http://localhost:5173  |  admin@library.com
+        </p>
+      </div>
+      <div class="slide-footer" style="border-top-color: rgba(255,255,255,0.15); color: #93c5fd;">
+        <span>Library Management System — College Project Presentation</span>
+        <span>Slide 21 / 21</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation Control Bar -->
+  <div class="controls">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="btn" id="prevBtn" onclick="changeSlide(-1)">&larr; Previous</button>
+      <button class="btn" id="nextBtn" onclick="changeSlide(1)">Next &rarr;</button>
+      <span class="counter" id="slideNum">1 / 21</span>
+    </div>
+    <div style="font-size:12px; color:#94a3b8;">
+      Press <kbd style="background:#334155; padding:2px 6px; border-radius:4px; color:#fff;">&rarr;</kbd> or <kbd style="background:#334155; padding:2px 6px; border-radius:4px; color:#fff;">Space</kbd> for next slide, <kbd style="background:#334155; padding:2px 6px; border-radius:4px; color:#fff;">F</kbd> for Fullscreen
+    </div>
+    <div>
+      <button class="btn" onclick="toggleFullScreen()">Fullscreen</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    function showSlide(n) {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      const active = document.getElementById(`slide-${n}`);
+      if (active) active.classList.add('active');
+      document.getElementById('slideNum').textContent = `${n} / ${totalSlides}`;
+      document.getElementById('prevBtn').disabled = (n === 1);
+      document.getElementById('nextBtn').disabled = (n === totalSlides);
+    }
+
+    function changeSlide(delta) {
+      const target = currentSlide + delta;
+      if (target >= 1 && target <= totalSlides) {
+        currentSlide = target;
+        showSlide(currentSlide);
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        changeSlide(-1);
+      } else if (e.key === 'Home') {
+        currentSlide = 1;
+        showSlide(1);
+      } else if (e.key === 'End') {
+        currentSlide = totalSlides;
+        showSlide(totalSlides);
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
